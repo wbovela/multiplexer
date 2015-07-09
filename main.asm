@@ -137,12 +137,25 @@ end     jmp     $ea81
 ;--------------------------------------------------
 ;   move sprite along x axis
 ;--------------------------------------------------
+screen@ byte    0
 animate nop
         inc     SPRITE_0_X
         lda     SPRITE_0_X
         bne     ex      
         lda     #50     
         sta     SPRITE_0_X
+        ; switch screens
+        lda     screen@
+        jsr     draw_screen
+        lda     screen@
+        beq     one
+        ldx     #0
+        jmp     ex@
+one     ldx     #1
+ex@     stx     screen@
+        rts
+        
+        
 ex      rts
 ;--------------------------------------------------
 ;   initialise sprite 1
